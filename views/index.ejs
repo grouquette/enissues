@@ -3,27 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message d'erreur</title>
+    <title>Tickets d'erreur</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-red-500 to-lime-800 flex justify-center items-center min-h-screen">
-    <div class ="bg-white p-8 rounded-lg shadow-md w-full max-w-md" >
-        <h2 class="text-xl font-semibold mb-4">Liste des messages d'erreurs rencontrées</h2>
-        <ul class="mb-6 space-y-2">
-            <% if (messages.length > 0) { %> <% messages.forEach(function(msg) { %>
-              <li class="border-b border-gray-200 py-2">
-                <span class="font-bold">Auteur : </span> <%= msg.auteur%> -  <span class="font-bold"> Date : </span> <%= new Date(msg.date).toLocaleString() %>
-                <p><span class="font-bold">Titre : </span><%= msg.titre%> -  <span class="font-bold">Statut :  </span><%= msg.etat%></p>
-                <p><%= msg.description%></p>
-              </li>
-            <% }); %> <% } else { %>
-             <li>Aucun message soumis pour le moment.</li>
-            <% } %>
-        </ul>
+<body class="bg-gradient-to-br from-red-500 to-green-500 flex justify-center items-center min-h-screen">
+    
+    
+    <div class ="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold text-center mb-6">
-            Message d'erreur
+            Ticket d'erreur
         </h1>
-
         <form action="/issue/create" method="post" class="space-y-6">
             <div>
                 <label for="auteur" class="block text-lg font-medium text-gray-700">
@@ -43,7 +32,7 @@
                 <label for="description" class="block text-lg font-medium text-gray-700">
                     Description : 
                 </label>
-                <textarea name="description" id="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                <textarea name="description" id="description" placeholder="Description du problème..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </textarea>
             </div>
             <div>
@@ -59,14 +48,32 @@
                 <input type="hidden" id="date" name="date" value="">
             </div>
             <div class="flex justify-center">
-          <button
-            type="submit"
-            class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            Envoyer
-          </button>
+                <button
+                type="submit"
+                class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    Envoyer
+                </button>
+            </div>
         </form>
     </div>
+    <% if (tickets.length > 0) { %> <% tickets.forEach(function(ticket) { %>
+        <div class ="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md w-full max-w-md" >
+            
+            <ul class="mb-6 space-y-2">
+              <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre%></h3>
+                <li class="border-b border-gray-200 py-2">
+                <span class="font-bold">Auteur : </span> <%= ticket.auteur%> -  <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
+                <span class="font-bold">Statut :  </span><%= ticket.etat%></p>
+                <p><%= ticket.description%></p>
+              </li>
+            </ul>
+        </div>
+    <% }); %> <% } else { %>
+        <div class ="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md w-full max-w-md">     
+            <h2 class="text-xl font-semibold mb-4">Aucun ticket soumis pour le moment.</h2>
+        </div>
+    <% } %>
  <script src="./js/form.js"></script>   
 </body>
 </html>
