@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message d'erreur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-red-500 to-lime-800 flex justify-center items-center min-h-screen">
+    <div class ="bg-white p-8 rounded-lg shadow-md w-full max-w-md" >
+        <h2 class="text-xl font-semibold mb-4">Liste des messages d'erreurs rencontrées</h2>
+        <ul class="mb-6 space-y-2">
+            <% if (messages.length > 0) { %> <% messages.forEach(function(msg) { %>
+              <li class="border-b border-gray-200 py-2">
+                <span class="font-bold">Auteur : </span> <%= msg.auteur%> -  <span class="font-bold"> Date : </span> <%= new Date(msg.date).toLocaleString() %>
+                <p><span class="font-bold">Titre : </span><%= msg.titre%> -  <span class="font-bold">Statut :  </span><%= msg.etat%></p>
+                <p><%= msg.description%></p>
+              </li>
+            <% }); %> <% } else { %>
+             <li>Aucun message soumis pour le moment.</li>
+            <% } %>
+        </ul>
+        <h1 class="text-2xl font-bold text-center mb-6">
+            Message d'erreur
+        </h1>
+
+        <form action="/issue/create" method="post" class="space-y-6">
+            <div>
+                <label for="auteur" class="block text-lg font-medium text-gray-700">
+                    Nom : 
+                </label>
+                <input type="text" id="auteur" name="auteur" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Entrez votre nom" required>
+            </div>
+            <div>
+                <label for="titre" class="block text-lg font-medium text-gray-700">
+                    Titre : 
+                </label>
+                <input type="text" id="titre" name="titre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Titre du message d'erreur" required>
+            </div>
+            <div>
+                <label for="description" class="block text-lg font-medium text-gray-700">
+                    Description : 
+                </label>
+                <textarea name="description" id="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                </textarea>
+            </div>
+            <div>
+                <label for="etat" class="block text-lg font-medium text-gray-700">
+                    Etat : 
+                </label>
+                <select name="etat" id="etat" required>
+                    <option value="En-Cours">En Cours</option>
+                    <option value="Resolu">Résolu</option>
+                </select>
+            </div>
+            <div>
+                <input type="hidden" id="date" name="date" value="">
+            </div>
+            <div class="flex justify-center">
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Envoyer
+          </button>
+        </form>
+    </div>
+ <script src="./js/form.js"></script>   
+</body>
+</html>
