@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Ticket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-red-500 to-green-500 flex flex-col justify-center items-center min-h-screen">
+<div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre %></h3>
+                    <ul class="mb-6 space-y-2">
+                        <li class="border-b border-gray-200 py-2">
+                            <span class="font-bold">Auteur : </span> <%= ticket.auteur %> -
+                            <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
+                           <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
+                            <p><%= ticket.description %></p>
+                            
+                        </li>
+                        <li>
+                            <button type="submit"class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <a href="/issue/update/<%= ticket.id %>">Modifier</a>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit"  class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <a href="/issue/delete/<%= ticket.id %>">Supprimer</a>
+                            </button>
+                        </li>
+                    </ul>
+                </div></body>
+</html>
+
