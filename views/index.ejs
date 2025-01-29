@@ -6,38 +6,37 @@
     <title>Tickets d'erreur</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-red-500 to-green-500 flex justify-center items-center min-h-screen">
-    
-    
-    <div class ="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+<body class="bg-gradient-to-br from-red-500 to-green-500 flex flex-col justify-center items-center min-h-screen">
+
+    <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md w-full max-w-md mb-8">
         <h1 class="text-2xl font-bold text-center mb-6">
             Ticket d'erreur
         </h1>
         <form action="/issue/create" method="post" class="space-y-6">
             <div>
-                <label for="auteur" class="block text-lg font-medium text-gray-700">
-                    Nom : 
+                <label for="auteur" class="block text-lg font-medium text-gray-900">
+                    Nom :
                 </label>
                 <input type="text" id="auteur" name="auteur" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Entrez votre nom" required>
             </div>
             <div>
-                <label for="titre" class="block text-lg font-medium text-gray-700">
-                    Titre : 
+                <label for="titre" class="block text-lg font-medium text-gray-900">
+                    Titre :
                 </label>
                 <input type="text" id="titre" name="titre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Titre du message d'erreur" required>
             </div>
             <div>
-                <label for="description" class="block text-lg font-medium text-gray-700">
-                    Description : 
+                <label for="description" class="block text-lg font-medium text-gray-900">
+                    Description :
                 </label>
                 <textarea name="description" id="description" placeholder="Description du problème..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </textarea>
             </div>
             <div>
-                <label for="etat" class="block text-lg font-medium text-gray-700">
-                    Etat : 
+                <label for="etat" class="block text-lg font-medium text-gray-900">
+                    Etat :
                 </label>
                 <select name="etat" id="etat" required>
                     <option value="En-Cours">En Cours</option>
@@ -57,23 +56,35 @@
             </div>
         </form>
     </div>
-    <% if (tickets.length > 0) { %> <% tickets.forEach(function(ticket) { %>
-        <div class ="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md w-full max-w-md" >
-            
-            <ul class="mb-6 space-y-2">
-              <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre%></h3>
-                <li class="border-b border-gray-200 py-2">
-                <span class="font-bold">Auteur : </span> <%= ticket.auteur%> -  <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
-                <span class="font-bold">Statut :  </span><%= ticket.etat%></p>
-                <p><%= ticket.description%></p>
-              </li>
-            </ul>
+
+    <div class="w-full max-w-md space-y-4">
+        <% if (tickets.length > 0) { %>
+            <% tickets.forEach(function(ticket) { %>
+                <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre %></h3>
+                    <ul class="mb-6 space-y-2">
+                        <li class="border-b border-gray-200 py-2">
+                            <span class="font-bold">Auteur : </span> <%= ticket.auteur %> -
+                            <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
+                           <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
+                            <a href="/issue/detail/<%= ticket.id %>" class= "text-xl text-indigo-500 font-semibold mb-4">Lire plus</a>   
+                        </li> 
+                    </ul>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Aucun ticket soumis pour le moment.</h2>
+            </div>
+        <% } %>
+    </div>
+
+    <a href="/error">
+        <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md ">
+        <h2 class="text-blue-700">Erreur test</h2>
         </div>
-    <% }); %> <% } else { %>
-        <div class ="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md w-full max-w-md">     
-            <h2 class="text-xl font-semibold mb-4">Aucun ticket soumis pour le moment.</h2>
-        </div>
-    <% } %>
- <script src="./js/form.js"></script>   
+    </a>
+
+    <script src="./js/form.js"></script>
 </body>
 </html>
