@@ -7,27 +7,69 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-red-500 to-green-500 flex flex-col justify-center items-center min-h-screen">
-<div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre %></h3>
-                    <ul class="mb-6 space-y-2">
-                        <li class="border-b border-gray-200 py-2">
-                            <span class="font-bold">Auteur : </span> <%= ticket.auteur %> -
-                            <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
-                           <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
-                            <p><%= ticket.description %></p>
-                            
-                        </li>
-                        <li>
-                            <button type="submit"class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <a href="/issue/update/<%= ticket.id %>">Modifier</a>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="submit"  class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <a href="/issue/delete/<%= ticket.id %>">Supprimer</a>
-                            </button>
-                        </li>
-                    </ul>
-                </div></body>
+    <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre %></h3>
+        <ul class="mb-6 space-y-2">
+            <li class="border-b border-gray-200 py-2">
+                <span class="font-bold">Auteur : </span> <%= ticket.auteur %> -
+                <span class="font-bold"> Date de création : </span> <%= new Date(ticket.dateCreation).toLocaleString() %> - 
+                <% if (ticket.dateModification) { %>
+                    <p><span class="font-bold">Dernière modification : </span> 
+                    <%= new Date(ticket.dateModification).toLocaleString() %> </p>                           
+            <% } %>
+            <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
+                <p><%= ticket.description %></p>
+                
+            </li>
+            <li>
+                <button type="submit"class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <a href="/issue/update/<%= ticket.id %>">Modifier</a>
+                </button>
+            </li>
+            <li>
+                <button type="submit"  class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <a href="/issue/delete/<%= ticket.id %>">Supprimer</a>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
+        <div class="mt-8">
+            <h4 class="text-lg font-semibold mb-4">Réponses</h4>
+            <% if (ticket.reponses && ticket.reponses.length > 0) { %>
+                <% ticket.reponses.forEach(function(reponse) { %>
+                    <div class="bg-gradient-to-tl from-pink-500 to-yellow-500 p-4 rounded-lg mb-4">
+                        <p class="font-bold"><%= reponse.auteur %></p>
+                        <p class="text-gray-600"><%= new Date(reponse.dateCreation).toLocaleString() %></p>
+                        <p class="mt-2"><%= reponse.contenu %></p>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <!-- Formulaire de réponse -->
+        <form action="/issue/answer/<%= ticket._id %>" method="post" class="mt-6">
+            <div class="mb-4">
+                <label for="auteur" class="block text-lg font-medium text-gray-900">
+                    Votre nom :
+                </label>
+                <input type="text" id="auteur" name="auteur" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="mb-4">
+                <label for="contenu" class="block text-lg font-medium text-gray-900">
+                    Votre réponse :
+                </label>
+                <textarea id="contenu" name="contenu" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" 
+                    rows="4"></textarea>
+            </div>
+            <button type="submit" 
+                class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700">
+                Répondre
+            </button>
+        </form>
+    </div>
+</body>
 </html>
 

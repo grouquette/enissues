@@ -1,87 +1,113 @@
 const express = require("express");
 const router = express.Router();
-const tickets = require("../data/tickets");
+const mongoose = require("mongoose");
+const Ticket = require("../services/ticketsService");
+const Answer = require("../services/answerService")
 
-let id = 0;
+mongoose.connect("mongodb://localhost:27017/enissuedb");
+
 
 /* POST issue creation. */
-router.post("/create", (req, res) => {
-  id++;
-  const { auteur, titre, description, etat, date } = req.body;
-  tickets.push({ id, auteur, titre, description, etat, date });
+router.post("/create", async (req, res) => {
+  const newTicket = new Ticket({
+    auteur: req.body.auteur,
+    titre: req.body.titre,
+    description: req.body.description,
+    dateCreation: req.body.dateCreation,
+    etat: req.body.etat
+  });
+  await newTicket.save();
   res.redirect("/");
 });
 
-router.get("/detail/:id", (req, res) => {
-  const id = req.params.id;
-
-  // Trouver le ticket à modifier
-  const ticket = tickets.find((t) => t.id == id);
-
-  if (!ticket) {
+router.get("/detail/:id", async (req, res) => {
+  try {
+    // Trouver le ticket à afficher
+    const ticket = await Ticket.findById(req.params.id)
+    .populate("reponses");
     // Si le ticket n'est pas trouvé, rediriger vers la page d'accueil
-    return res.redirect("/");
+    if (!ticket) {
+      return res.status(404).send("Ticket non trouvé");
+    }
+    // Rendre la page avec les données du ticket
+    res.render("detail", { ticket });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur lors de la récupération du ticket"); 
   }
-
-  // Rendre la page de modification avec les données du ticket
-  res.render("detail", { ticket });
 });
 
-router.get("/delete/:id", (req, res) => {
-  const idx = req.params.id;
-  
+router.post("/answer/:ticketId", async (req, res) => {
+  try {
+    const ticket = await Ticket.findById(req.params.ticketId);
+    if(!ticket){
+      return res.status(404).send("Ticket non trouvé");
+    }
 
-  // Trouver l'index du ticket dans le tableau
-  const index = tickets.findIndex((ticket) => ticket.id == idx);
-  
+    // Créer la nouvelle réponse
+    const reponse = new Answer({
+      ticketId: ticket.id,
+      auteur: req.body.auteur,
+      contenu: req.body.contenu,
+      dateCreation: new Date()
+    });
 
-  // Si le ticket est trouvé
-  if (index !== -1) {
-    // Supprimer le ticket
-    tickets.splice(index, 1);
+    // Sauvegarder la réponse
+    await reponse.save();
+    // Ajouter la référence de la réponse au ticket
+    ticket.reponses.push(reponse._id);
+    await ticket.save();
+
+    // Mettre à jour la date de modification du ticket
+    await Ticket.findByIdAndUpdate(ticket._id, {
+      dateModification: new Date()
+    });
+    res.redirect("/")
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur lors de l'ajout de la réponse")    
   }
 
-  // Rediriger vers la page d'accueil
+})
+
+router.get("/delete/:id", async (req, res) => {
+  await Ticket.findByIdAndDelete(req.params.id);
   res.redirect("/");
 });
 
-router.get("/update/:id", (req, res) => {
-  const id = req.params.id;
-
+router.get("/update/:id", async (req, res) => {
   // Trouver le ticket à modifier
-  const ticket = tickets.find((t) => t.id == id);
-
+  const ticket = await Ticket.findById(req.params.id);
+  // Si le ticket n'est pas trouvé, rediriger vers la page d'accueil
   if (!ticket) {
-    // Si le ticket n'est pas trouvé, rediriger vers la page d'accueil
     return res.redirect("/");
   }
-
   // Rendre la page de modification avec les données du ticket
   res.render("update", { ticket });
 });
 
-router.post("/update/:id", (req, res) => {
-  const id = req.params.id;
+router.post("/update/:id", async (req, res) => {
+ try {
+   // Ajout de la date de modification
+   req.body.dateModification = new Date();
 
-  // Trouver l'index du ticket dans le tableau
-  const index = tickets.findIndex((t) => t.id == id);
+   const updatedTicket = await Ticket.findByIdAndUpdate(
+     req.params.id,
+     {
+       ...req.body,
+       dateModification: new Date(),
+     },
+     { new: true }
+   );
 
-  if (index !== -1) {
-    // Mettre à jour le ticket avec les nouvelles données
-    tickets[index] = {
-      // Garder l'id et autres propriétés existantes
-      ...tickets[index],
-      // modifier les valeurs
-      titre: req.body.titre,
-      auteur: req.body.auteur,
-      description: req.body.description,
-      etat: req.body.etat,
-      dateModification: new Date(),
-    };
-  }
-
-  // Rediriger vers la page d'accueil
-  res.redirect("/");
+   if (!updatedTicket) {
+     return res.status(404).send("Ticket non trouvé");
+   }
+   res.redirect("/");
+ } catch (error) {
+  console.error(error);
+  res.status(500).send("Erreur lors de la mise à jour du ticket");
+ } 
 });
 
 module.exports = router;
