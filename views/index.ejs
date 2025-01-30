@@ -44,7 +44,7 @@
                 </select>
             </div>
             <div>
-                <input type="hidden" id="date" name="date" value="">
+                <input type="hidden" id="dateCreation" name="dateCreation" value="">
             </div>
             <div class="flex justify-center">
                 <button
@@ -65,9 +65,13 @@
                     <ul class="mb-6 space-y-2">
                         <li class="border-b border-gray-200 py-2">
                             <span class="font-bold">Auteur : </span> <%= ticket.auteur %> -
-                            <span class="font-bold"> Date : </span> <%= new Date(ticket.date).toLocaleString() %>
-                           <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
-                            <a href="/issue/detail/<%= ticket.id %>" class= "text-xl text-indigo-500 font-semibold mb-4">Lire plus</a>   
+                            <span class="font-bold"> Date de création : </span> <%= new Date(ticket.dateCreation).toLocaleString() %> - 
+                           <% if (ticket.dateModification) { %>
+                                <p><span class="font-bold">Dernière modification : </span> 
+                                <%= new Date(ticket.dateModification).toLocaleString() %></p>                            
+                           <% } %>
+                            <p><span class="font-bold">Statut : </span> <%= ticket.etat %></p>
+                            <a href="/issue/detail/<%= ticket._id %>" class= "text-xl text-indigo-500 font-semibold mb-4">Lire plus</a>   
                         </li> 
                     </ul>
                 </div>

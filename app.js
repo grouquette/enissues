@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3333;
 
 const app = express();
@@ -26,8 +27,11 @@ app.get("/error", (req, res) => {
 // Middleware de gestion des erreurs
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  // Envoi sur une page erreur
   res.status(500).render("erreur", { titre: "Erreur interne", erreur: err });
 });
+
+// Page non existante
 app.use((req, res, next) => {
   res.status(404).render("404");
 });
