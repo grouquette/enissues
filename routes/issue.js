@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const Ticket = require("../services/ticketsService");
 const Answer = require("../services/answerService")
 
-mongoose.connect("mongodb://localhost:27017/enissuedb");
 
 
 /* POST issue creation. */
@@ -27,13 +25,19 @@ router.get("/detail/:id", async (req, res) => {
     .populate("reponses");
     // Si le ticket n'est pas trouvé, rediriger vers la page d'accueil
     if (!ticket) {
-      return res.status(404).send("Ticket non trouvé");
+      return res.status(404).render("404");
     }
     // Rendre la page avec les données du ticket
     res.render("detail", { ticket });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Erreur lors de la récupération du ticket"); 
+    res
+      .status(500)
+      .render("erreur", {
+        titre: "Erreur interne",
+        message: "Erreur lors de la récupération du ticket",
+        erreur: error
+      }); 
   }
 });
 
