@@ -7,6 +7,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-red-500 to-green-500 flex flex-col justify-center items-center min-h-screen">
+    <header class="w-full bg-gradient-to-r from-blue-500 to-purple-500 p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold">
+                Enissues
+            </div>
+            <ul class="flex space-x-4">
+                <li>
+                    <a href="/" class="text-white hover:text-gray-300">Accueil</a>
+                </li>
+                <li>
+                    <a href="/error" class="text-white hover:text-gray-300">Test Erreur</a>
+                </li>
+                <li>
+                    <a href="/contact" class="text-white hover:text-gray-300">Page non existante</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
     <div class="bg-gradient-to-bl from-teal-300 to-amber-300 p-8 rounded-lg shadow-md">
         <h3 class="text-xl font-semibold mb-4">Titre : <%= ticket.titre %></h3>
         <ul class="mb-6 space-y-2">

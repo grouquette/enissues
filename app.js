@@ -19,16 +19,18 @@ app.use("/", indexRouter);
 app.use("/issue", issueRouter);
 
 
-// Route qui génère une erreur
+// Route qui génère une erreur intentionnellement
 app.get("/error", (req, res) => {
   throw new Error("Oops! Une erreur s'est produite.");
+  
+  
 });
 
 // Middleware de gestion des erreurs
 app.use((err, req, res, next) => {
   console.error(err.stack);
   // Envoi sur une page erreur
-  res.status(500).render("erreur", { titre: "Erreur interne", erreur: err });
+  res.status(500).render("erreur", { titre: "Erreur interne", message: "essai d'erreur", erreur: err });
 });
 
 // Page non existante
